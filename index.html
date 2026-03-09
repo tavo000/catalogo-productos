@@ -168,23 +168,41 @@ const catDiv = document.getElementById("categorias")
 
 /* CREAR BOTONES */
 
+let botonCombos = null
+
 ordenCategorias.forEach(cat => {
 
 if(categorias[cat]){
 
-catDiv.innerHTML += `
-<button onclick="mostrarCategoria('${cat}')">
-${cat}
-</button>
-`
+const btn = document.createElement("button")
+btn.textContent = cat
+btn.onclick = () => mostrarCategoria(cat)
+
+catDiv.appendChild(btn)
+
+if(cat === "Combos"){
+botonCombos = btn
+}
 
 }
 
 })
 
 // mostrar Combos al cargar
+// categoría inicial
 if(categorias["Combos"]){
+
 mostrarCategoria("Combos")
+
+if(botonCombos){
+botonCombos.classList.add("active")
+}
+
+}else{
+
+const primera = Object.keys(categorias)[0]
+mostrarCategoria(primera)
+
 }
 
 /* SI EXISTEN OTRAS CATEGORIAS NO LISTADAS */
@@ -250,6 +268,7 @@ contenedor.innerHTML += `
 </body>
 
 </html>
+
 
 
 
