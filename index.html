@@ -43,11 +43,8 @@ transition:0.3s;
 background:#2563eb;
 }
 
-/* BOTON ACTIVO */
-
 #categorias button.active{
 background:#22c55e;
-color:white;
 }
 
 /* GRID PRODUCTOS */
@@ -59,16 +56,12 @@ gap:25px;
 padding:25px;
 }
 
-/* TARJETA PRODUCTO */
-
 .card{
 background:white;
 padding:15px;
 border-radius:10px;
 text-align:center;
-
 box-shadow:0 8px 18px rgba(0,0,0,0.08);
-
 transition:0.25s;
 }
 
@@ -98,7 +91,6 @@ font-size:18px;
 <h1>Catálogo de productos</h1>
 
 <div id="categorias"></div>
-
 <div id="productos" class="grid"></div>
 
 <script>
@@ -160,7 +152,8 @@ const ordenCategorias = [
 "Juguetes",
 "Pesca",
 "Zapatillas",
-"Accesorios Vehículos"
+"Accesorios Vehículos",
+"Otros"
 
 ]
 
@@ -168,64 +161,33 @@ const catDiv = document.getElementById("categorias")
 
 /* CREAR BOTONES */
 
-let botonCombos = null
-
 ordenCategorias.forEach(cat => {
 
 if(categorias[cat]){
 
 const btn = document.createElement("button")
+
 btn.textContent = cat
+
 btn.onclick = () => mostrarCategoria(cat)
 
 catDiv.appendChild(btn)
 
-if(cat === "Combos"){
-botonCombos = btn
-}
-
 }
 
 })
 
-// mostrar Combos al cargar
-// categoría inicial
+/* CATEGORIA INICIAL */
+
 if(categorias["Combos"]){
 
 mostrarCategoria("Combos")
 
-if(botonCombos){
-botonCombos.classList.add("active")
-}
-
 }else{
 
-const primera = Object.keys(categorias)[0]
-mostrarCategoria(primera)
+mostrarCategoria(Object.keys(categorias)[0])
 
 }
-
-/* SI EXISTEN OTRAS CATEGORIAS NO LISTADAS */
-
-Object.keys(categorias).forEach(cat => {
-
-if(!ordenCategorias.includes(cat)){
-
-catDiv.innerHTML += `
-<button onclick="mostrarCategoria('${cat}')">
-${cat}
-</button>
-`
-
-}
-
-})
-
-/* MOSTRAR PRIMERA CATEGORIA */
-
-const primeraCategoria = Object.keys(categorias)[0]
-
-mostrarCategoria(primeraCategoria)
 
 })
 
@@ -233,18 +195,18 @@ mostrarCategoria(primeraCategoria)
 function mostrarCategoria(cat){
 
 const contenedor = document.getElementById("productos")
+
 contenedor.innerHTML = ""
 
-// quitar active de todos
+/* BOTON ACTIVO */
+
 document.querySelectorAll("#categorias button").forEach(b=>{
 b.classList.remove("active")
-})
 
-// activar botón correcto
-document.querySelectorAll("#categorias button").forEach(b=>{
 if(b.textContent === cat){
 b.classList.add("active")
 }
+
 })
 
 categorias[cat].forEach(p => {
@@ -262,12 +224,13 @@ contenedor.innerHTML += `
 })
 
 }
-  
+
 </script>
 
 </body>
 
 </html>
+
 
 
 
