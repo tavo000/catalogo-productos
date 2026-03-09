@@ -9,32 +9,72 @@
 
 body{
 font-family:Arial;
-background:#f5f5f5;
+background:#f4f6f9;
 margin:0;
+padding:0;
 }
 
 h1{
 padding:20px;
+margin:0;
+background:#1f2937;
+color:white;
 }
+
+/* BOTONES DE CATEGORIA */
+
+#categorias{
+padding:15px;
+}
+
+#categorias button{
+margin:5px;
+padding:10px 18px;
+border-radius:8px;
+border:none;
+background:#374151;
+color:white;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
+}
+
+#categorias button:hover{
+background:#2563eb;
+}
+
+/* BOTON ACTIVO */
+
+#categorias button.active{
+background:#22c55e;
+color:white;
+}
+
+/* GRID PRODUCTOS */
 
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:20px;
-padding:20px;
+gap:25px;
+padding:25px;
 }
+
+/* TARJETA PRODUCTO */
 
 .card{
 background:white;
 padding:15px;
-border-radius:8px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
+border-radius:10px;
 text-align:center;
-transition:0.2s;
+
+box-shadow:0 8px 18px rgba(0,0,0,0.08);
+
+transition:0.25s;
 }
 
 .card:hover{
-transform:scale(1.02);
+transform:translateY(-5px);
+box-shadow:0 12px 25px rgba(0,0,0,0.15);
 }
 
 .card img{
@@ -44,27 +84,9 @@ object-fit:contain;
 }
 
 .price{
-color:#009900;
+color:#16a34a;
 font-weight:bold;
-}
-
-button{
-margin:5px;
-padding:8px 15px;
-border-radius:6px;
-border:none;
-background:#333;
-color:white;
-cursor:pointer;
-font-size:14px;
-}
-
-button:hover{
-background:#555;
-}
-
-#categorias{
-margin:20px;
+font-size:18px;
 }
 
 </style>
@@ -191,6 +213,12 @@ const contenedor = document.getElementById("productos")
 
 contenedor.innerHTML = ""
 
+document.querySelectorAll("#categorias button").forEach(b=>{
+b.classList.remove("active")
+})
+
+event.target.classList.add("active")
+
 categorias[cat].forEach(p => {
 
 let img = p.image
@@ -216,10 +244,10 @@ contenedor.innerHTML += `
 })
 
 }
-
 </script>
 
 </body>
 
 </html>
+
 
