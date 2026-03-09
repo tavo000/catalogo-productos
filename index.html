@@ -182,6 +182,11 @@ ${cat}
 
 })
 
+// mostrar Combos al cargar
+if(categorias["Combos"]){
+mostrarCategoria("Combos")
+}
+
 /* SI EXISTEN OTRAS CATEGORIAS NO LISTADAS */
 
 Object.keys(categorias).forEach(cat => {
@@ -210,44 +215,41 @@ mostrarCategoria(primeraCategoria)
 function mostrarCategoria(cat){
 
 const contenedor = document.getElementById("productos")
-
 contenedor.innerHTML = ""
 
+// quitar active de todos
 document.querySelectorAll("#categorias button").forEach(b=>{
 b.classList.remove("active")
 })
 
-event.target.classList.add("active")
+// activar botón correcto
+document.querySelectorAll("#categorias button").forEach(b=>{
+if(b.textContent === cat){
+b.classList.add("active")
+}
+})
 
 categorias[cat].forEach(p => {
 
 let img = p.image
 
-if(!img.startsWith("http")){
-img = "https://tua.ar/" + img
-}
-
 contenedor.innerHTML += `
-
 <div class="card">
-
 <img src="${img}" loading="lazy">
-
 <h4>${p.name}</h4>
-
 <p class="price">${p.price}</p>
-
 </div>
-
 `
 
 })
 
 }
+  
 </script>
 
 </body>
 
 </html>
+
 
 
