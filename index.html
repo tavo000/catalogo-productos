@@ -66,7 +66,7 @@ border-radius:8px;
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+grid-template-columns:repeat(4,1fr);
 gap:25px;
 padding:25px;
 }
@@ -111,8 +111,12 @@ display:block;
 
 .grid{
 grid-template-columns:repeat(2,1fr);
-padding:10px;
 gap:12px;
+padding:12px;
+}
+
+.card img{
+height:140px;
 }
 
 }
@@ -192,25 +196,22 @@ const ordenCategorias = [
 ]
 
 const catDiv = document.getElementById("categorias")
-
 const select = document.getElementById("categoriaSelect")
 
 ordenCategorias.forEach(cat => {
 
 if(categorias[cat]){
 
-/* BOTONES DESKTOP */
-
 const btn = document.createElement("button")
 btn.textContent = cat
 btn.onclick = () => mostrarCategoria(cat)
-catDiv.appendChild(btn)
 
-/* SELECTOR MOBILE */
+catDiv.appendChild(btn)
 
 const opt = document.createElement("option")
 opt.value = cat
 opt.textContent = cat
+
 select.appendChild(opt)
 
 }
@@ -220,8 +221,6 @@ select.appendChild(opt)
 select.onchange = function(){
 mostrarCategoria(this.value)
 }
-
-/* CARGA INICIAL */
 
 if(categorias["Combos"]){
 
@@ -256,11 +255,9 @@ b.classList.add("active")
 
 categorias[cat].forEach(p => {
 
-let img = p.image
-
 contenedor.innerHTML += `
 <div class="card">
-<img src="${img}" loading="lazy">
+<img src="${p.image}" loading="lazy">
 <h4>${p.name}</h4>
 <p class="price">${p.price}</p>
 </div>
