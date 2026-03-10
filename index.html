@@ -193,6 +193,29 @@ z-index:999;
 .whatsapp-float:hover{
 background:#1ebe5d;
 }  
+
+#ordenar{
+margin-left:15px;
+padding:12px;
+border-radius:8px;
+border:1px solid #ddd;
+font-size:15px;
+}
+
+@media (max-width:768px){
+
+.buscador-container{
+flex-direction:column;
+gap:10px;
+}
+
+#ordenar{
+margin-left:0;
+width:90%;
+}
+
+}
+  
 </style>
 
 </head>
@@ -209,6 +232,16 @@ id="buscador"
 placeholder="🔎 Buscar productos..."
 onkeyup="buscarProducto()"
 />
+
+<select id="ordenar" onchange="ordenarProductos()">
+
+<option value="">Ordenar por</option>
+<option value="mayor">Mayor precio</option>
+<option value="menor">Menor precio</option>
+<option value="az">A-Z</option>
+<option value="za">Z-A</option>
+
+</select>
 
 </div>
 
@@ -337,14 +370,22 @@ categorias[cat].forEach(p => {
 
 contenedor.innerHTML += `
 <div class="card">
+
+<a href="producto.html?nombre=${encodeURIComponent(p.name)}">
+
 <img src="${p.image}" loading="lazy">
+
+</a>
+
 <h4>${p.name}</h4>
 <p class="price">${p.price}</p>
 
 <a class="buy-btn"
 href="https://wa.me/5493401415127?text=Hola%20quiero%20comprar:%20${encodeURIComponent(p.name)}"
 target="_blank">
+
 Comprar por WhatsApp
+
 </a>
 
 </div>
@@ -368,7 +409,9 @@ if(p.name.toLowerCase().includes(texto)){
 
 contenedor.innerHTML += `
 <div class="card">
+<a href="producto.html?nombre=${encodeURIComponent(p.name)}">
 <img src="${p.image}" loading="lazy">
+</a>
 <h4>${p.name}</h4>
 <p class="price">${p.price}</p>
 
@@ -387,6 +430,76 @@ Comprar por WhatsApp
 
 }
 
+function ordenarProductos(){
+
+const tipo = document.getElementById("ordenar").value
+
+let productos = Object.values(categorias).flat()
+
+if(tipo === "mayor"){
+productos.sort((a,b)=>parsePrecio(b.price)-parsePrecio(a.price))
+}
+
+if(tipo === "menor"){
+productos.sort((a,b)=>parsePrecio(a.price)-parsePrecio(b.price))
+}
+
+if(tipo === "az"){
+productos.sort((a,b)=>a.name.localeCompare(b.name))
+}
+
+if(tipo === "za"){
+productos.sort((a,b)=>b.name.localeCompare(a.name))
+}
+
+mostrarLista(productos)
+
+}
+
+function parsePrecio(precio){
+
+return Number(
+precio.replace("$","")
+.replace(/\./g,"")
+.replace(",",".")
+)
+
+}
+
+function mostrarLista(lista){
+
+const contenedor = document.getElementById("productos")
+contenedor.innerHTML=""
+
+lista.forEach(p=>{
+
+contenedor.innerHTML+=`
+<div class="card">
+
+<a href="producto.html?nombre=${encodeURIComponent(p.name)}">
+
+<img src="${p.image}" loading="lazy">
+
+</a>
+
+<h4>${p.name}</h4>
+<p class="price">${p.price}</p>
+
+<a class="buy-btn"
+href="https://wa.me/5493401415127?text=Hola%20quiero%20comprar:%20${encodeURIComponent(p.name)}"
+target="_blank">
+
+Comprar por WhatsApp
+
+</a>
+
+</div>
+`
+
+})
+
+}
+  
 </script>
 <a
 href="https://wa.me/5493401415127?text=Hola%20quiero%20ver%20el%20catalogo"
