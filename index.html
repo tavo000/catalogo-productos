@@ -253,6 +253,9 @@ onkeyup="buscarProducto()"
 
 <script>
 
+const params = new URLSearchParams(window.location.search)
+const categoriaURL = params.get("categoria")  
+
 let categorias = {}
 
 fetch("./productos.json")
@@ -336,7 +339,12 @@ select.onchange = function(){
 mostrarCategoria(this.value)
 }
 
-if(categorias["Combos"]){
+if(categoriaURL && categorias[categoriaURL]){
+
+mostrarCategoria(categoriaURL)
+select.value=categoriaURL
+
+}else if(categorias["Combos"]){
 
 mostrarCategoria("Combos")
 select.value="Combos"
@@ -514,6 +522,7 @@ target="_blank"
 </body>
 
 </html>
+
 
 
 
