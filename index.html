@@ -136,7 +136,63 @@ font-weight:bold;
 .buy-btn:hover{
 background:#1ebe5d;
 }
-  
+
+/* BUSCADOR */
+
+.buscador-container{
+padding:20px;
+display:flex;
+justify-content:center;
+}
+
+#buscador{
+width:60%;
+max-width:500px;
+padding:12px 15px;
+border-radius:8px;
+border:1px solid #ddd;
+font-size:16px;
+outline:none;
+}
+
+#buscador:focus{
+border:1px solid #2563eb;
+box-shadow:0 0 4px rgba(37,99,235,0.3);
+}
+
+/* MOBILE */
+
+@media (max-width:768px){
+
+#buscador{
+width:90%;
+}
+
+}
+
+/* BOTON WHATSAPP FLOTANTE */
+
+.whatsapp-float{
+position:fixed;
+bottom:20px;
+right:20px;
+width:60px;
+height:60px;
+background:#25D366;
+color:white;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+text-decoration:none;
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+z-index:999;
+}
+
+.whatsapp-float:hover{
+background:#1ebe5d;
+}  
 </style>
 
 </head>
@@ -144,6 +200,17 @@ background:#1ebe5d;
 <body>
 
 <h1>Catálogo de productos</h1>
+
+<div class="buscador-container">
+
+<input
+type="text"
+id="buscador"
+placeholder="🔎 Buscar productos..."
+onkeyup="buscarProducto()"
+/>
+
+</div>
 
 <select id="categoriaSelect"></select>
 
@@ -156,9 +223,7 @@ background:#1ebe5d;
 let categorias = {}
 
 fetch("./productos.json")
-
 .then(r=>r.json())
-
 .then(data=>{
 
 data.forEach(p => {
@@ -253,7 +318,6 @@ select.value=primera
 
 })
 
-
 function mostrarCategoria(cat){
 
 const contenedor = document.getElementById("productos")
@@ -278,24 +342,66 @@ contenedor.innerHTML += `
 <p class="price">${p.price}</p>
 
 <a class="buy-btn"
-href="https://wa.me/5493401415127?text=Hola%20quiero%20comprar:%20${encodeURIComponent(p.name)}"
+href="https://wa.me/5493401511815?text=Hola%20quiero%20comprar:%20${encodeURIComponent(p.name)}"
 target="_blank">
-
 Comprar por WhatsApp
-
 </a>
 
 </div>
 `
 
 })
+
+}
+
+function buscarProducto(){
+
+const texto = document.getElementById("buscador").value.toLowerCase()
+
+const contenedor = document.getElementById("productos")
+
+contenedor.innerHTML = ""
+
+Object.values(categorias).flat().forEach(p=>{
+
+if(p.name.toLowerCase().includes(texto)){
+
+contenedor.innerHTML += `
+<div class="card">
+<img src="${p.image}" loading="lazy">
+<h4>${p.name}</h4>
+<p class="price">${p.price}</p>
+
+<a class="buy-btn"
+href="https://wa.me/5493401511815?text=Hola%20quiero%20comprar:%20${encodeURIComponent(p.name)}"
+target="_blank">
+Comprar por WhatsApp
+</a>
+
+</div>
+`
+
+}
+
+})
+
 }
 
 </script>
+<a
+href="https://wa.me/5493401511815?text=Hola%20quiero%20ver%20el%20catalogo"
+class="whatsapp-float"
+target="_blank"
+>
 
+💬
+
+</a>  
+  
 </body>
 
 </html>
+
 
 
 
