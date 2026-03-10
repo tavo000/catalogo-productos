@@ -117,7 +117,9 @@ fetch("./productos.json")
 .then(r=>r.json())
 .then(data=>{
 
-const producto = data.find(p=>p.name === nombre)
+const producto = data.find(p =>
+p.name.toLowerCase().trim() === nombre.toLowerCase().trim()
+)
 
 if(!producto){
 document.body.innerHTML="Producto no encontrado"
