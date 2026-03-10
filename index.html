@@ -371,7 +371,7 @@ categorias[cat].forEach(p => {
 contenedor.innerHTML += `
 <div class="card">
 
-<a href="producto.html?nombre=${encodeURIComponent(p.name)}">
+<a href="producto.html?nombre=${encodeURIComponent(p.name)}&cat=${encodeURIComponent(cat)}">
 
 <img src="${p.image}" loading="lazy">
 
@@ -514,6 +514,7 @@ target="_blank"
 </body>
 
 </html>
+
 
 
 
