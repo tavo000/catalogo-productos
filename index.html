@@ -435,7 +435,7 @@ if(p.name.toLowerCase().includes(texto)){
 
 contenedor.innerHTML += `
 <div class="card">
-<a href="producto.html?nombre=${encodeURIComponent(p.name)}">
+<a href="producto.html?nombre=${encodeURIComponent(p.name)}&cat=${encodeURIComponent(p.category)}">
 <img src="${p.image}" loading="lazy">
 </a>
 <h4>${p.name}</h4>
@@ -500,7 +500,7 @@ lista.forEach(p=>{
 contenedor.innerHTML+=`
 <div class="card">
 
-<a href="producto.html?nombre=${encodeURIComponent(p.name)}">
+<a href="producto.html?nombre=${encodeURIComponent(p.name)}&cat=${encodeURIComponent(p.category)}">
 
 <img src="${p.image}" loading="lazy">
 
@@ -512,6 +512,13 @@ contenedor.innerHTML+=`
 <button class="buy-btn" onclick="agregarCarrito('${p.name}','${p.price}','${p.image}')">
 Agregar al carrito
 </button>
+
+</div>
+`
+
+})
+
+}
 
 function agregarCarrito(nombre,precio,imagen){
 
@@ -538,16 +545,16 @@ actualizarContador()
 
 function actualizarContador(){
 
-document.getElementById("contadorCarrito").innerText = carrito.length
+let total = 0
 
-}
-
-</div>
-`
-
+carrito.forEach(p=>{
+total += p.cantidad
 })
 
+document.getElementById("contadorCarrito").innerText = total
+
 }
+
 
 function abrirCarrito(){
 
@@ -565,13 +572,32 @@ const contenedor = document.getElementById("listaCarrito")
 
 contenedor.innerHTML=""
 
-carrito.forEach(p=>{
+if(carrito.length===0){
 
-contenedor.innerHTML += `
-<div style="margin-bottom:10px;border-bottom:1px solid #eee;padding-bottom:10px;">
+contenedor.innerHTML="<p>El carrito está vacío</p>"
+return
+
+}
+
+carrito.forEach((p,index)=>{
+
+contenedor.innerHTML+=`
+<div style="border-bottom:1px solid #eee;padding:10px 0">
+
 <b>${p.name}</b><br>
-Cantidad: ${p.cantidad}<br>
+
+<div style="display:flex;gap:10px;margin-top:5px">
+
+<button onclick="restarCantidad(${index})">-</button>
+
+<span>${p.cantidad}</span>
+
+<button onclick="sumarCantidad(${index})">+</button>
+
+</div>
+
 Precio: ${p.price}
+
 </div>
 `
 
@@ -579,14 +605,45 @@ Precio: ${p.price}
 
 }
 
+function sumarCantidad(index){
+
+carrito[index].cantidad++
+
+actualizarContador()
+mostrarCarrito()
+
+}
+
+function restarCantidad(index){
+
+if(carrito[index].cantidad > 1){
+
+carrito[index].cantidad--
+
+}else{
+
+carrito.splice(index,1)
+
+}
+
+actualizarContador()
+mostrarCarrito()
+
+}
+
 function enviarPedido(){
+
+if(carrito.length === 0){
+
+alert("El carrito está vacío")
+return
+
+}
 
 let mensaje = "Hola quiero comprar:%0A%0A"
 
 carrito.forEach(p=>{
-
 mensaje += `${p.cantidad} x ${p.name}%0A`
-
 })
 
 window.open(`https://wa.me/5493401415127?text=${mensaje}`)
@@ -623,6 +680,7 @@ Enviar pedido por WhatsApp
 </body>
 
 </html>
+
 
 
 
