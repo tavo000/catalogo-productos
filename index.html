@@ -122,6 +122,21 @@ height:140px;
 
 }
 
+.buy-btn{
+display:inline-block;
+margin-top:10px;
+padding:10px 14px;
+background:#25D366;
+color:white;
+text-decoration:none;
+border-radius:6px;
+font-weight:bold;
+}
+
+.buy-btn:hover{
+background:#1ebe5d;
+}
+  
 </style>
 
 </head>
@@ -261,11 +276,19 @@ contenedor.innerHTML += `
 <img src="${p.image}" loading="lazy">
 <h4>${p.name}</h4>
 <p class="price">${p.price}</p>
+
+<a class="buy-btn"
+href="https://wa.me/5493401415127?text=Hola%20quiero%20comprar:%20${encodeURIComponent(p.name)}"
+target="_blank">
+
+Comprar por WhatsApp
+
+</a>
+
 </div>
 `
 
 })
-
 }
 
 </script>
@@ -273,6 +296,7 @@ contenedor.innerHTML += `
 </body>
 
 </html>
+
 
 
 
