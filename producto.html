@@ -75,8 +75,8 @@ grid-template-columns:1fr;
 
 <body>
 
-<a href="index.html" class="volver-btn">← Volver al catálogo</a>
-
+<a id="volver" class="volver-btn">← Volver al catálogo</a>
+  
 <div class="container">
 
 <img id="imagen">
@@ -101,6 +101,14 @@ Comprar por WhatsApp
 
 const params = new URLSearchParams(window.location.search)
 const nombre = params.get("nombre")
+const categoria = params.get("cat")
+const volver = document.getElementById("volver")
+
+if(categoria){
+volver.href = `index.html?categoria=${encodeURIComponent(categoria)}`
+}else{
+volver.href = "index.html"
+}
 
 fetch("./productos.json")
 .then(r=>r.json())
