@@ -16,6 +16,21 @@ background:#f4f6f9;
 margin:0;
 }
 
+.volver-btn{
+display:inline-block;
+margin:20px;
+padding:10px 16px;
+background:#374151;
+color:white;
+text-decoration:none;
+border-radius:6px;
+font-weight:bold;
+}
+
+.volver-btn:hover{
+background:#2563eb;
+}
+
 .container{
 max-width:1000px;
 margin:auto;
@@ -54,21 +69,6 @@ grid-template-columns:1fr;
 
 }
 
-.volver-btn{
-display:inline-block;
-margin:20px;
-padding:10px 15px;
-background:#374151;
-color:white;
-text-decoration:none;
-border-radius:6px;
-font-weight:bold;
-}
-
-.volver-btn:hover{
-background:#2563eb;
-}
-  
 </style>
 
 </head>
@@ -76,7 +76,7 @@ background:#2563eb;
 <body>
 
 <a href="index.html" class="volver-btn">← Volver al catálogo</a>
-  
+
 <div class="container">
 
 <img id="imagen">
@@ -90,9 +90,7 @@ background:#2563eb;
 <p id="descripcion"></p>
 
 <a id="whatsapp" class="buy" target="_blank">
-
 Comprar por WhatsApp
-
 </a>
 
 </div>
@@ -103,23 +101,12 @@ Comprar por WhatsApp
 
 const params = new URLSearchParams(window.location.search)
 const nombre = params.get("nombre")
-const categoria = params.get("cat")  
-
-const volver = document.getElementById("volver")
-
-if(categoria){
-volver.href = `index.html?categoria=${encodeURIComponent(categoria)}`
-}else{
-volver.href = "index.html"
-}  
 
 fetch("./productos.json")
 .then(r=>r.json())
 .then(data=>{
 
-const producto = data.find(p =>
-p.name.toLowerCase().trim() === nombre.toLowerCase().trim()
-)
+const producto = data.find(p => p.name === nombre)
 
 if(!producto){
 document.getElementById("nombre").innerText="Producto no encontrado"
@@ -134,7 +121,7 @@ document.getElementById("descripcion").innerText =
 "Producto disponible. Consulte disponibilidad y envío."
 
 document.getElementById("whatsapp").href =
-`https://wa.me/5493401511815?text=Hola quiero comprar: ${encodeURIComponent(producto.name)}`
+`https://wa.me/5493401415127?text=Hola quiero comprar: ${encodeURIComponent(producto.name)}`
 
 })
 
