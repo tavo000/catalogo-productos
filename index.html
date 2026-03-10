@@ -215,6 +215,27 @@ width:90%;
 }
 
 }
+
+.carrito-float{
+position:fixed;
+bottom:100px;
+right:20px;
+background:#2563eb;
+color:white;
+padding:15px 18px;
+border-radius:50px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+
+.carrito-float span{
+background:white;
+color:black;
+padding:3px 7px;
+border-radius:10px;
+margin-left:5px;
+}
   
 </style>
 
@@ -257,6 +278,7 @@ const params = new URLSearchParams(window.location.search)
 const categoriaURL = params.get("categoria")  
 
 let categorias = {}
+let carrito = []
 
 fetch("./productos.json")
 .then(r=>r.json())
@@ -388,13 +410,9 @@ contenedor.innerHTML += `
 <h4>${p.name}</h4>
 <p class="price">${p.price}</p>
 
-<a class="buy-btn"
-href="https://wa.me/5493401415127?text=Hola%20quiero%20comprar:%20${encodeURIComponent(p.name)}"
-target="_blank">
-
-Comprar por WhatsApp
-
-</a>
+<button class="buy-btn" onclick="agregarCarrito('${p.name}','${p.price}','${p.image}')">
+Agregar al carrito
+</button>
 
 </div>
 `
@@ -423,11 +441,9 @@ contenedor.innerHTML += `
 <h4>${p.name}</h4>
 <p class="price">${p.price}</p>
 
-<a class="buy-btn"
-href="https://wa.me/5493401415127?text=Hola%20quiero%20comprar:%20${encodeURIComponent(p.name)}"
-target="_blank">
-Comprar por WhatsApp
-</a>
+<button class="buy-btn" onclick="agregarCarrito('${p.name}','${p.price}','${p.image}')">
+Agregar al carrito
+</button>
 
 </div>
 `
@@ -493,18 +509,87 @@ contenedor.innerHTML+=`
 <h4>${p.name}</h4>
 <p class="price">${p.price}</p>
 
-<a class="buy-btn"
-href="https://wa.me/5493401415127?text=Hola%20quiero%20comprar:%20${encodeURIComponent(p.name)}"
-target="_blank">
+<button class="buy-btn" onclick="agregarCarrito('${p.name}','${p.price}','${p.image}')">
+Agregar al carrito
+</button>
 
-Comprar por WhatsApp
+function agregarCarrito(nombre,precio,imagen){
 
-</a>
+const producto = carrito.find(p => p.name === nombre)
+
+if(producto){
+
+producto.cantidad++
+
+}else{
+
+carrito.push({
+name:nombre,
+price:precio,
+image:imagen,
+cantidad:1
+})
+
+}
+
+actualizarContador()
+
+}
+
+function actualizarContador(){
+
+document.getElementById("contadorCarrito").innerText = carrito.length
+
+}
 
 </div>
 `
 
 })
+
+}
+
+function abrirCarrito(){
+
+const panel = document.getElementById("carritoPanel")
+
+panel.style.display = panel.style.display === "none" ? "block" : "none"
+
+mostrarCarrito()
+
+}
+
+function mostrarCarrito(){
+
+const contenedor = document.getElementById("listaCarrito")
+
+contenedor.innerHTML=""
+
+carrito.forEach(p=>{
+
+contenedor.innerHTML += `
+<div style="margin-bottom:10px;border-bottom:1px solid #eee;padding-bottom:10px;">
+<b>${p.name}</b><br>
+Cantidad: ${p.cantidad}<br>
+Precio: ${p.price}
+</div>
+`
+
+})
+
+}
+
+function enviarPedido(){
+
+let mensaje = "Hola quiero comprar:%0A%0A"
+
+carrito.forEach(p=>{
+
+mensaje += `${p.cantidad} x ${p.name}%0A`
+
+})
+
+window.open(`https://wa.me/5493401415127?text=${mensaje}`)
 
 }
   
@@ -518,10 +603,27 @@ target="_blank"
 💬
 
 </a>  
+
+<a class="carrito-float" onclick="abrirCarrito()">
+🛒 <span id="contadorCarrito">0</span>
+</a>
+
+<div id="carritoPanel" style="display:none; position:fixed; right:0; top:0; width:350px; height:100%; background:white; box-shadow:-5px 0 20px rgba(0,0,0,0.2); padding:20px; overflow:auto;">
+
+<h2>Tu carrito</h2>
+
+<div id="listaCarrito"></div>
+
+<button onclick="enviarPedido()" style="margin-top:20px;padding:12px;background:#25D366;color:white;border:none;border-radius:6px;font-weight:bold;width:100%;">
+Enviar pedido por WhatsApp
+</button>
+
+</div>
   
 </body>
 
 </html>
+
 
 
 
