@@ -258,6 +258,10 @@ background:rgba(0,0,0,0.4);
 display:none;
 z-index:998;
 }
+
+#carritoPanel{
+z-index:999;
+}
   
 </style>
 
@@ -593,7 +597,6 @@ document.getElementById("contadorCarrito").innerText = total
 
 }
 
-
 function abrirCarrito(){
 
 const panel = document.getElementById("carritoPanel")
@@ -709,17 +712,19 @@ window.open(`https://wa.me/5493401415127?text=${mensaje}`)
 
 function cerrarCarrito(){
 
-document.getElementById("carritoPanel").style.display="none"
+document.getElementById("carritoPanel").style.display = "none"
+document.getElementById("carritoOverlay").style.display = "none"
 
 }
 
 window.onclick = function(event){
 
 const panel = document.getElementById("carritoPanel")
+const overlay = document.getElementById("carritoOverlay")
 
-if(event.target === panel){
+if(event.target === overlay){
 
-panel.style.display = "none"
+cerrarCarrito()
 
 }
 
@@ -742,12 +747,10 @@ panel.style.display = "none"
 
 })  
 
-document.getElementById("carritoOverlay").onclick = function(){
-
-document.getElementById("carritoPanel").style.display = "none"
-this.style.display = "none"
+document.getElementById("carritoOverlay").onclick = cerrarCarrito
 
 }
+  
 </script>
 <a
 href="https://wa.me/5493401415127?text=Hola%20quiero%20ver%20el%20catalogo"
@@ -769,7 +772,15 @@ target="_blank"
 
 <div style="display:flex;justify-content:space-between;align-items:center;">
 
+<div style="display:flex;justify-content:space-between;align-items:center;">
+
 <h2>Tu carrito</h2>
+
+<button onclick="cerrarCarrito()" style="border:none;background:none;font-size:22px;cursor:pointer;">
+✕
+</button>
+
+</div>
 
 <button onclick="cerrarCarrito()" style="border:none;background:none;font-size:22px;cursor:pointer;">
 ✕
@@ -788,6 +799,7 @@ Enviar pedido por WhatsApp
 </body>
 
 </html>
+
 
 
 
