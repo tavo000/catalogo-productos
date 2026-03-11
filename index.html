@@ -596,7 +596,7 @@ contenedor.innerHTML+=`
 
 </div>
 
-Precio: ${p.price}
+Total: $${(parsePrecio(p.price) * p.cantidad).toLocaleString()}
 
 </div>
 `
@@ -641,10 +641,18 @@ return
 }
 
 let mensaje = "Hola quiero comprar:%0A%0A"
+let total = 0
 
 carrito.forEach(p=>{
-mensaje += `${p.cantidad} x ${p.name}%0A`
+
+let subtotal = parsePrecio(p.price) * p.cantidad
+total += subtotal
+
+mensaje += `${p.cantidad} x ${p.name} - $${subtotal.toLocaleString()}%0A`
+
 })
+
+mensaje += `%0ATotal: $${total.toLocaleString()}`
 
 window.open(`https://wa.me/5493401415127?text=${mensaje}`)
 
@@ -680,6 +688,7 @@ Enviar pedido por WhatsApp
 </body>
 
 </html>
+
 
 
 
