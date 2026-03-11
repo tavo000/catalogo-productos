@@ -361,10 +361,17 @@ select.onchange = function(){
 mostrarCategoria(this.value)
 }
 
+const categoriaGuardada = localStorage.getItem("categoriaActiva")
+
 if(categoriaURL && categorias[categoriaURL]){
 
 mostrarCategoria(categoriaURL)
 select.value=categoriaURL
+
+}else if(categoriaGuardada && categorias[categoriaGuardada]){
+
+mostrarCategoria(categoriaGuardada)
+select.value=categoriaGuardada
 
 }else if(categorias["Combos"]){
 
@@ -382,6 +389,8 @@ select.value=primera
 })
 
 function mostrarCategoria(cat){
+
+localStorage.setItem("categoriaActiva",cat)
 
 const contenedor = document.getElementById("productos")
 
@@ -657,6 +666,25 @@ mensaje += `%0ATotal: $${total.toLocaleString()}`
 window.open(`https://wa.me/5493401415127?text=${mensaje}`)
 
 }
+
+
+function cerrarCarrito(){
+
+document.getElementById("carritoPanel").style.display="none"
+
+}
+
+window.onclick = function(event){
+
+const panel = document.getElementById("carritoPanel")
+
+if(event.target === panel){
+
+panel.style.display = "none"
+
+}
+
+}
   
 </script>
 <a
@@ -675,7 +703,15 @@ target="_blank"
 
 <div id="carritoPanel" style="display:none; position:fixed; right:0; top:0; width:350px; height:100%; background:white; box-shadow:-5px 0 20px rgba(0,0,0,0.2); padding:20px; overflow:auto;">
 
+<div style="display:flex;justify-content:space-between;align-items:center;">
+
 <h2>Tu carrito</h2>
+
+<button onclick="cerrarCarrito()" style="border:none;background:none;font-size:22px;cursor:pointer;">
+✕
+</button>
+
+</div>
 
 <div id="listaCarrito"></div>
 
@@ -688,6 +724,7 @@ Enviar pedido por WhatsApp
 </body>
 
 </html>
+
 
 
 
