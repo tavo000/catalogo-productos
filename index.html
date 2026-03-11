@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Catálogo</title>
 
 <style>
@@ -12,14 +13,30 @@ body{
 font-family:Arial;
 background:#f4f6f9;
 margin:0;
-padding:0;
 }
 
 h1{
-padding:20px;
-margin:0;
 background:#1f2937;
 color:white;
+padding:20px;
+margin:0;
+}
+
+/* BUSCADOR */
+
+.buscador-container{
+padding:20px;
+display:flex;
+justify-content:center;
+}
+
+#buscador{
+width:60%;
+max-width:500px;
+padding:12px;
+border-radius:8px;
+border:1px solid #ddd;
+font-size:16px;
 }
 
 /* CATEGORIAS */
@@ -28,17 +45,16 @@ color:white;
 padding:15px;
 display:flex;
 flex-wrap:wrap;
+gap:8px;
 }
 
 #categorias button{
-margin:5px;
-padding:10px 18px;
-border-radius:8px;
+padding:8px 14px;
 border:none;
+border-radius:20px;
 background:#374151;
 color:white;
 cursor:pointer;
-font-weight:bold;
 }
 
 #categorias button.active{
@@ -77,34 +93,18 @@ font-size:18px;
 .buy-btn{
 margin-top:10px;
 padding:10px 14px;
-background:#25D366;
+background:#2563eb;
 color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
 }
 
-/* BUSCADOR */
-
-.buscador-container{
-padding:20px;
-display:flex;
-justify-content:center;
-}
-
-#buscador{
-width:60%;
-max-width:500px;
-padding:12px;
-border-radius:8px;
-border:1px solid #ddd;
-}
-
 /* CARRITO */
 
 .carrito-float{
 position:fixed;
-bottom:100px;
+bottom:90px;
 right:20px;
 background:#2563eb;
 color:white;
@@ -154,10 +154,11 @@ z-index:999;
 <h1>Catálogo de productos</h1>
 
 <div class="buscador-container">
-<input type="text" id="buscador" placeholder="Buscar..." onkeyup="buscarProducto()">
+<input id="buscador" placeholder="Buscar producto..." onkeyup="buscarProducto()">
 </div>
 
 <div id="categorias"></div>
+
 <div id="productos" class="grid"></div>
 
 <div class="carrito-float" onclick="abrirCarrito()">
@@ -193,6 +194,17 @@ fetch("./productos.json")
 data.forEach(p=>{
 
 let cat = p.category || "Otros"
+cat = cat.toLowerCase()
+
+if(cat.includes("combo")) cat="Combos"
+else if(cat.includes("electro")) cat="Electrodomésticos"
+else if(cat.includes("belleza")) cat="Belleza"
+else if(cat.includes("hogar")) cat="Hogar"
+else if(cat.includes("bazar")) cat="Bazar"
+else if(cat.includes("herramient")) cat="Herramientas"
+else cat="Otros"
+
+p.category = cat
 
 if(!categorias[cat]) categorias[cat]=[]
 categorias[cat].push(p)
@@ -226,6 +238,12 @@ function mostrarCategoria(cat){
 const cont=document.getElementById("productos")
 cont.innerHTML=""
 
+document.querySelectorAll("#categorias button").forEach(b=>b.classList.remove("active"))
+
+document.querySelectorAll("#categorias button").forEach(b=>{
+if(b.innerText===cat) b.classList.add("active")
+})
+
 categorias[cat].forEach(p=>{
 
 cont.innerHTML+=`
@@ -248,23 +266,42 @@ Agregar al carrito
 
 }
 
+function buscarProducto(){
+
+const texto=document.getElementById("buscador").value.toLowerCase()
+
+const cont=document.getElementById("productos")
+cont.innerHTML=""
+
+Object.values(categorias).flat().forEach(p=>{
+
+if(p.name.toLowerCase().includes(texto)){
+
+cont.innerHTML+=`
+<div class="card">
+<img src="${p.image}">
+<h4>${p.name}</h4>
+<p class="price">${p.price}</p>
+<button class="buy-btn" onclick="agregarCarrito('${p.name}','${p.price}','${p.image}')">
+Agregar al carrito
+</button>
+</div>
+`
+
+}
+
+})
+
+}
+
 function agregarCarrito(nombre,precio,imagen){
 
 const prod=carrito.find(p=>p.name===nombre)
 
 if(prod){
-
 prod.cantidad++
-
 }else{
-
-carrito.push({
-name:nombre,
-price:precio,
-image:imagen,
-cantidad:1
-})
-
+carrito.push({name:nombre,price:precio,image:imagen,cantidad:1})
 }
 
 actualizarContador()
@@ -315,7 +352,6 @@ return
 carrito.forEach((p,i)=>{
 
 cont.innerHTML+=`
-
 <div style="border-bottom:1px solid #ddd;padding:10px">
 
 <b>${p.name}</b>
@@ -333,7 +369,6 @@ ${p.cantidad}
 Total $${(parsePrecio(p.price)*p.cantidad).toLocaleString()}
 
 </div>
-
 `
 
 })
@@ -341,23 +376,17 @@ Total $${(parsePrecio(p.price)*p.cantidad).toLocaleString()}
 }
 
 function sumarCantidad(i){
-
 carrito[i].cantidad++
 actualizarContador()
 mostrarCarrito()
-
 }
 
 function restarCantidad(i){
 
 if(carrito[i].cantidad>1){
-
 carrito[i].cantidad--
-
 }else{
-
 carrito.splice(i,1)
-
 }
 
 actualizarContador()
@@ -366,18 +395,14 @@ mostrarCarrito()
 }
 
 function parsePrecio(precio){
-
 return Number(precio.replace("$","").replace(/\./g,""))
-
 }
 
 function enviarPedido(){
 
 if(carrito.length===0){
-
 alert("Carrito vacío")
 return
-
 }
 
 let msg="Hola quiero comprar:%0A%0A"
@@ -398,39 +423,10 @@ window.open(`https://wa.me/5493401415127?text=${msg}`)
 
 }
 
-function buscarProducto(){
-
-const texto=document.getElementById("buscador").value.toLowerCase()
-
-const cont=document.getElementById("productos")
-cont.innerHTML=""
-
-Object.values(categorias).flat().forEach(p=>{
-
-if(p.name.toLowerCase().includes(texto)){
-
-cont.innerHTML+=`
-<div class="card">
-<img src="${p.image}">
-<h4>${p.name}</h4>
-<p class="price">${p.price}</p>
-<button class="buy-btn" onclick="agregarCarrito('${p.name}','${p.price}','${p.image}')">
-Agregar al carrito
-</button>
-</div>
-`
-
-}
-
-})
-
-}
-
 </script>
 
 </body>
 </html>
-
 
 
 
