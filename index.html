@@ -236,6 +236,28 @@ padding:3px 7px;
 border-radius:10px;
 margin-left:5px;
 }
+
+.carrito-overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+display:none;
+z-index:998;
+}
+
+.carrito-overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+display:none;
+z-index:998;
+}
   
 </style>
 
@@ -550,6 +572,13 @@ cantidad:1
 
 actualizarContador()
 
+// SI EL CARRITO ESTÁ ABIERTO LO ACTUALIZA
+const panel = document.getElementById("carritoPanel")
+
+if(panel.style.display === "block"){
+mostrarCarrito()
+}
+
 }
 
 function actualizarContador(){
@@ -568,10 +597,20 @@ document.getElementById("contadorCarrito").innerText = total
 function abrirCarrito(){
 
 const panel = document.getElementById("carritoPanel")
+const overlay = document.getElementById("carritoOverlay")
 
-panel.style.display = panel.style.display === "none" ? "block" : "none"
+if(panel.style.display === "block"){
 
+panel.style.display = "none"
+overlay.style.display = "none"
+
+}else{
+
+panel.style.display = "block"
+overlay.style.display = "block"
 mostrarCarrito()
+
+}
 
 }
 
@@ -685,7 +724,30 @@ panel.style.display = "none"
 }
 
 }
-  
+
+document.addEventListener("click", function(event){
+
+const panel = document.getElementById("carritoPanel")
+const botonCarrito = document.querySelector(".carrito-float")
+
+if(
+panel.style.display === "block" &&
+!panel.contains(event.target) &&
+!botonCarrito.contains(event.target)
+){
+
+panel.style.display = "none"
+
+}
+
+})  
+
+document.getElementById("carritoOverlay").onclick = function(){
+
+document.getElementById("carritoPanel").style.display = "none"
+this.style.display = "none"
+
+}
 </script>
 <a
 href="https://wa.me/5493401415127?text=Hola%20quiero%20ver%20el%20catalogo"
@@ -700,6 +762,8 @@ target="_blank"
 <a class="carrito-float" onclick="abrirCarrito()">
 🛒 <span id="contadorCarrito">0</span>
 </a>
+
+<div id="carritoOverlay" class="carrito-overlay"></div>
 
 <div id="carritoPanel" style="display:none; position:fixed; right:0; top:0; width:350px; height:100%; background:white; box-shadow:-5px 0 20px rgba(0,0,0,0.2); padding:20px; overflow:auto;">
 
@@ -724,6 +788,7 @@ Enviar pedido por WhatsApp
 </body>
 
 </html>
+
 
 
 
