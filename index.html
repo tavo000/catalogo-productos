@@ -717,35 +717,9 @@ document.getElementById("carritoOverlay").style.display = "none"
 
 }
 
-window.onclick = function(event){
+document.getElementById("carritoOverlay").onclick = cerrarCarrito
 
-const panel = document.getElementById("carritoPanel")
-const overlay = document.getElementById("carritoOverlay")
 
-if(event.target === overlay){
-
-cerrarCarrito()
-
-}
-
-}
-
-document.addEventListener("click", function(event){
-
-const panel = document.getElementById("carritoPanel")
-const botonCarrito = document.querySelector(".carrito-float")
-
-if(
-panel.style.display === "block" &&
-!panel.contains(event.target) &&
-!botonCarrito.contains(event.target)
-){
-
-panel.style.display = "none"
-
-}
-
-})  
 
 document.getElementById("carritoOverlay").onclick = cerrarCarrito
 
@@ -769,8 +743,6 @@ target="_blank"
 <div id="carritoOverlay" class="carrito-overlay"></div>
 
 <div id="carritoPanel" style="display:none; position:fixed; right:0; top:0; width:350px; height:100%; background:white; box-shadow:-5px 0 20px rgba(0,0,0,0.2); padding:20px; overflow:auto;">
-
-<div style="display:flex;justify-content:space-between;align-items:center;">
 
 <div style="display:flex;justify-content:space-between;align-items:center;">
 
@@ -799,6 +771,7 @@ Enviar pedido por WhatsApp
 </body>
 
 </html>
+
 
 
 
